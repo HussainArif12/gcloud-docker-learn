@@ -40,7 +40,8 @@ env:
   REGION: 'europe-west10' # TODO: update to your region
   SERVICE: 'hello-world-docker' # TODO: update to your service name
   WORKLOAD_IDENTITY_PROVIDER: '${{secrets.WORKLOAD_IDENTITY_PROVIDER}}' # TODO: update to your workload identity provider
-
+  SERVICE_ACCOUNT_EMAIL: '${{secrets.SERVICE_ACCOUNT_EMAIL}}'
+  
 jobs:
   deploy:
     runs-on: 'ubuntu-latest'
@@ -63,7 +64,8 @@ jobs:
         with:
           project_id: '${{env.PROJECT_ID}}'
           workload_identity_provider: '${{ env.WORKLOAD_IDENTITY_PROVIDER }}'
-
+          service_account: '${{env.SERVICE_ACCOUNT_EMAIL}}'
+          
       # BEGIN - Docker auth and build
       #
       # If you already have a container image, you can omit these steps.
@@ -77,6 +79,7 @@ jobs:
       - name: 'Build and Push Container'
         run: |-
           DOCKER_TAG="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{ github.sha }}"
+          gcloud auth configure-docker "${{env.REGION}}-docker.pkg.dev"
           docker build --tag "${DOCKER_TAG}" .
           docker push "${DOCKER_TAG}"
       - name: 'Deploy to Cloud Run'
