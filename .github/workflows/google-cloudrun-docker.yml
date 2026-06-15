@@ -41,7 +41,7 @@ env:
   SERVICE: 'hello-world-service' # TODO: update to your service name
   WORKLOAD_IDENTITY_PROVIDER: '${{secrets.WORKLOAD_IDENTITY_PROVIDER}}' # TODO: update to your workload identity provider
   SERVICE_ACCOUNT_EMAIL: '${{secrets.SERVICE_ACCOUNT_EMAIL}}'
-  
+  IMAGE_NAME: 'hello-world-service'
 jobs:
   deploy:
     runs-on: 'ubuntu-latest'
@@ -79,7 +79,7 @@ jobs:
       - name: 'Build and Push Container'
         run: |-
           gcloud auth configure-docker europe-west10-docker.pkg.dev
-          DOCKER_TAG="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}:${{ github.sha }}"
+          DOCKER_TAG="${{ env.REGION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.SERVICE }}/${{env.IMAGE_NAME}}:${{ github.sha }}"
           docker build --tag "${DOCKER_TAG}" .
           docker push "${DOCKER_TAG}"
       - name: 'Deploy to Cloud Run'
