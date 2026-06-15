@@ -38,7 +38,7 @@ on:
 env:
   PROJECT_ID: 'gcloud-docker-learn' # TODO: update to your Google Cloud project ID
   REGION: 'europe-west10' # TODO: update to your region
-  SERVICE: 'hello-world-docker' # TODO: update to your service name
+  SERVICE: 'hello-world-service' # TODO: update to your service name
   WORKLOAD_IDENTITY_PROVIDER: '${{secrets.WORKLOAD_IDENTITY_PROVIDER}}' # TODO: update to your workload identity provider
   SERVICE_ACCOUNT_EMAIL: '${{secrets.SERVICE_ACCOUNT_EMAIL}}'
   
